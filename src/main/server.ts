@@ -1,12 +1,25 @@
-console.log(`Running environment ${process.env.NODE_ENV || "dev"}`);
+import * as Hapi from 'hapi'
+import User from './controllers/user.controller'
+import Graphql from './graphql'
 
-// Catch unhandled unexpected exceptions
-process.on('uncaughtException', (error: Error) => {
-  console.error(`uncaughtException ${error.message}`);
-});
+export function init(config): Promise<Hapi.Server> {
+  return new Promise((resolve) => {
 
-// Catch unhandled rejected promises
-process.on('unhandledRejection', (reason: any) => {
-  console.error(`unhandledRejection ${reason}`);
-});
+    const port = process.env.port || config.server.port
+    const server = new Hapi.Server()
 
+    server.connection({
+      host: 'localhost',
+      port,
+      routes: {
+        cors: true
+      }
+    })
+
+    Graphql(server, config)
+    User(server, config)
+
+    resolve(server)
+
+  })
+}
