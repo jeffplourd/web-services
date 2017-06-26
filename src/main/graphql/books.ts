@@ -25,7 +25,7 @@ export const mutations = `
 // query resolvers
 const books = () => data
 const book = (root, args, context) => {
-  console.log('root', root, 'args', args, 'context', context);
+  console.log('root', root, 'args', args, 'context', context)
   return data.find(book => book.id === args.id)
 }
 

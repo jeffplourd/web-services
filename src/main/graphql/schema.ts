@@ -2,7 +2,7 @@ import { bundle } from 'graphql-modules'
 import { makeExecutableSchema } from 'graphql-tools'
 
 import books from './books'
-import authors from './authors';
+import authors from './authors'
 
 const modules = [books, authors]
 

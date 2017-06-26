@@ -6,16 +6,25 @@ let typescript = require('gulp-typescript');
 let runSequence = require('run-sequence');
 let nodemon = require('gulp-nodemon');
 let lab = require('gulp-lab');
+let argv = require('yargs').argv;
+
+let {
+  $exec,
+  gcloud,
+  createPattern,
+  kubeServiceName,
+  gcluster,
+  gclusterExists,
+  extractMapping,
+  dbMigrate,
+  addMigrationFile,
+  env
+} = require('./gulp-utils');
 
 const TS_SRC_GLOB = './src/**/*.ts';
 const JS_SRC_GLOB = './build/**/*.js';
 const TS_GLOB = [TS_SRC_GLOB];
 const STATIC_FILES = ['./src/**/*.json'];
-
-const env = {
-  NODE_ENV: 'development',
-  NODE_CONFIG_DIR: './build/main/config'
-};
 
 const tsProject = typescript.createProject('tsconfig.json');
 
@@ -63,4 +72,44 @@ gulp.task('watch', ['build'], function() {
 gulp.task('test', ['build'], () => {
   return gulp.src('./build/test/**/*.js')
     .pipe(lab())
+});
+
+/* local database commands */
+
+gulp.task('dbLocalClean', [ 'dbLocalStop' ], (cb) => {
+  $exec('docker rm postgres')
+    .then(() => $exec('docker rmi -f postgres'))
+    .then(() => cb());
+});
+
+gulp.task('dbLocalStop', (cb) => {
+  $exec('docker stop postgres').then(() => cb());
+});
+
+gulp.task('dbLocalStart', ['dbLocalCreateContainer'], (cb) => {
+  $exec('docker start postgres').then(() => cb());
+});
+
+gulp.task('dbLocalCreateContainer', (cb) => {
+  $exec('docker pull postgres')
+    .then(() => $exec('docker create --name postgres -e POSTGRES_PASSWORD=postgres -p 5432:5432 postgres'))
+    .then(() => cb())
+    .catch(() => cb());
+});
+
+gulp.task('dbCreateFile', (cb) => {
+  if (!argv.filename) {
+    console.log('Must specify filename using "--filename=<name of file>"');
+    return;
+  }
+  addMigrationFile(argv.filename)
+});
+
+gulp.task('dbUpdate', (cb) => {
+  if (env.NODE_ENV === 'development') {
+    runSequence('build', 'dbLocalStart', () => dbMigrate(() => cb()));
+  }
+  else {
+    runSequence('build', () => dbMigrate(() => cb()));
+  }
 });
