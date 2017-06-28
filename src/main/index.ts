@@ -13,7 +13,7 @@ process.on('unhandledRejection', (reason: any) => {
   console.error(`unhandledRejection ${reason}`)
 })
 
-Server.init(config).then((server) => {
+Server.init(config).then(server => {
   server.start(() => {
     console.log('Server running at: ', server.info.uri)
   })

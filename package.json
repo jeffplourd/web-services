@@ -11,6 +11,8 @@
   "dependencies": {
     "@types/bcrypt": "^1.0.0",
     "bcrypt": "^1.0.2",
+    "boom": "^5.1.0",
+    "camelcase-keys": "^4.1.0",
     "config": "^1.26.1",
     "graphql": "^0.10.3",
     "graphql-modules": "^0.2.1",

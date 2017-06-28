@@ -1,8 +1,7 @@
 import { graphqlHapi, graphiqlHapi } from 'graphql-server-hapi'
 import { schema } from './schema'
 
-export default function (server, config) {
-
+export default function(server, config) {
   server.register({
     register: graphqlHapi,
     options: {
@@ -20,6 +19,4 @@ export default function (server, config) {
       }
     }
   })
-
 }
-

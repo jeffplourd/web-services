@@ -1,9 +1,9 @@
 import * as Hapi from 'hapi'
 import * as userService from '../services/user.service'
-import newUser from '../models/validations/new-user.validation'
+import NewUser from '../models/validations/new-user.validation'
+import LoginRequest from '../models/validations/login-request.validation'
 
-export default function (server: Hapi.Server, config) {
-
+export default function(server: Hapi.Server, config) {
   server.route({
     method: 'GET',
     path: '/users',
@@ -12,7 +12,7 @@ export default function (server: Hapi.Server, config) {
       return reply('hello world')
     },
     config: {
-      auth:  'jwt'
+      auth: 'jwt'
     }
   })
 
@@ -20,13 +20,13 @@ export default function (server: Hapi.Server, config) {
     method: 'POST',
     path: '/users',
     handler: (request, reply) => {
-      userService.create(request.payload).then((token) => {
-        reply(token)
+      userService.create(request.payload).then(token => {
+        reply({ token })
       })
     },
     config: {
       validate: {
-        payload: newUser
+        payload: NewUser
       },
       auth: false
     }
@@ -36,11 +36,19 @@ export default function (server: Hapi.Server, config) {
     method: 'POST',
     path: '/users/login',
     handler: (request, reply) => {
-
+      userService.login(request.payload)
+        .then(token => {
+          reply({ token })
+        })
+        .catch(error => {
+          reply(error)
+        })
     },
     config: {
+      validate: {
+        payload: LoginRequest
+      },
       auth: false
     }
   })
-
 }

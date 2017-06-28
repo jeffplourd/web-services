@@ -21,7 +21,6 @@ interface Roles {
 interface RoleUser extends User, Roles {}
 
 export class UserRowData implements RoleUser {
-
   public id: string
   public email?: string
   public username?: string
@@ -37,6 +36,4 @@ export class UserRowData implements RoleUser {
     this.email = userData.email || null
     this.username = userData.username || null
   }
-
 }
-

@@ -1,12 +1,5 @@
 import db from '../db/db'
-import * as userDao from '../dao/user.dao'
-import * as userAuthDao from './user-auth.dao'
-import * as userRoleDao from './user-role.dao'
-import { UserAuthRow } from './user-auth.dao'
-import { UserRoleRow } from './user-role.dao'
 import { BaseRow } from './base-row'
-import { UserRowData } from '../models/domain/user'
-
 
 export interface UserRow {
   id: string
@@ -34,18 +27,17 @@ export class UserRow extends BaseRow {
   }
 }
 
-
 export function insertUser(user: UserRow) {
   return db.insert(user.toSql).into('classkick.user')
 }
 
-export function createUser(user: UserRowData) {
-  // refactor to actually use transaction
-  return db.transaction((transaction) => {
-    return Promise.all([
-      userDao.insertUser(user.userData),
-      Promise.all(user.roleData.map((roleRow) => userRoleDao.insertUserRole(roleRow))),
-      Promise.all(user.authData.map((authRow) => userAuthDao.insertUserAuth(authRow)))
-    ])
-  })
+export function getById(id: string) {
+  return db
+    .select('*')
+    .from('classkick.user')
+    .where({ id })
+    .then(result => {
+      let head = result[0]
+      return UserRow.fromSql(head)
+    })
 }

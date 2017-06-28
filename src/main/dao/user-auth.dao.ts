@@ -14,7 +14,6 @@ export interface UserAuthRow {
 }
 
 export class UserAuthRow extends BaseRow {
-
   constructor(
     public userId: string,
     public type: string,
@@ -29,8 +28,30 @@ export class UserAuthRow extends BaseRow {
     super()
   }
 
+  static apply(obj): UserAuthRow {
+    return new UserAuthRow(
+      obj.userId,
+      obj.type,
+      obj.created,
+      obj.salt,
+      obj.accessTokenHash,
+      obj.accessTokenCreated,
+      obj.resetTokenHash,
+      obj.resetTokenCreated,
+      obj.passwordHash
+    )
+  }
 }
 
 export function insertUserAuth(auth: UserAuthRow) {
   return db.insert(auth.toSql).into('classkick.user_auth')
+}
+
+export function getByUserEmailAndType(userEmail: string, authType: string) {
+  return db
+    .raw(`SELECT a.* FROM classkick.user_auth a JOIN classkick.user u ON a.user_id = u.id WHERE u.email = '${userEmail}' AND a.type = '${authType}'`)
+    .then((result) => {
+      let head = result.rows && result.rows[0]
+      return UserAuthRow.apply(UserAuthRow.fromSql(head))
+    })
 }

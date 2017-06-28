@@ -6,7 +6,7 @@ const connection = {
   port: postgres.port,
   user: postgres.user,
   database: postgres.database,
-  password: postgres.password,
+  password: postgres.password
 }
 
 let db = knex({

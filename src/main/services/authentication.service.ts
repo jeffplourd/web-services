@@ -1,5 +1,6 @@
 import * as jwt from 'jsonwebtoken'
 import * as config from 'config'
+import * as bcrypt from 'bcrypt'
 import { UserRowData } from '../models/domain/user'
 
 export function createAccessToken(user: UserRowData) {
@@ -13,7 +14,11 @@ export function createAccessToken(user: UserRowData) {
     config.server.secret,
     {
       algorithm: 'HS256',
-      expiresIn: '1h'
+      expiresIn: '24h'
     }
   )
+}
+
+export function checkPassword(password: string, hash) {
+  return bcrypt.compare(password, hash)
 }
