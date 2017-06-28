@@ -50,3 +50,8 @@ export function getAll() {
     return result.map(userRow => UserRow.fromSql(userRow))
   })
 }
+
+export function update(id, update) {
+  return db('classkick.user').where({ id })
+    .update(UserRow.toSql(update))
+}

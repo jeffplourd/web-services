@@ -1,6 +1,15 @@
 import * as userDao from '../dao/user.dao'
+import * as userService from '../services/user.service'
 
 const schema = `
+  input UserUpdate {
+    username: String
+    email: String
+    firstName: String
+    lastName: String
+    displayName: String
+  }
+  
   type User {
     id: String
     email: String
@@ -14,11 +23,11 @@ const schema = `
 
 export const queries = `
   users: [User]
-  user(email: String): User
+  user(email: String): Boolean
 `
 
 export const mutations = `
-  updateUser(id: Int, name: String): User
+  updateUser(id: String, update: UserUpdate): Boolean
 `
 // query resolvers
 const users = () => {
@@ -30,13 +39,8 @@ const user = (_, args) => {
 }
 
 // mutation resolvers
-// const updateBook = (root, args) => data.find(book => book.id === args.id)
-const updateUser = (root, args) => {
-  console.log('updateUser', root, args)
-  return {
-    id: 'test',
-    email: 'test@email.com'
-  }
+const updateUser = (_, args) => {
+  return userService.update(args.id, args.update)
 }
 
 const resolvers = {

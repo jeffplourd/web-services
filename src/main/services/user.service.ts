@@ -12,6 +12,7 @@ import { UserRow } from '../dao/user.dao'
 import { NewUser } from '../models/domain/new-user'
 import { UserRowData } from '../models/domain/user'
 import * as Boom from 'boom'
+import * as _ from 'lodash'
 
 export async function create(newUser: NewUser) {
   let userRowData = await newUserAccountRows(newUser)
@@ -108,4 +109,10 @@ async function newAuthRow(
 
 function sqlTimestamp() {
   return moment().format('YYYY-MM-DD HH:mm:ss')
+}
+
+export async function update(id: string, update: any) {
+  let user = await userDao.getById(id)
+  let updatedUser = _.assign({}, user, update)
+  return !!await userDao.update(id, updatedUser)
 }

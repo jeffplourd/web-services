@@ -5,7 +5,11 @@ export class BaseRow {
   constructor() {}
 
   get toSql() {
-    return snakecaseKeys(this)
+    return BaseRow.toSql(this)
+  }
+
+  static toSql(value) {
+    return snakecaseKeys(value)
   }
 
   static fromSql(value) {
