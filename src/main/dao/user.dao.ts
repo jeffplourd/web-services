@@ -37,3 +37,16 @@ export function getById(id: string) {
     return UserRow.fromSql(head)
   })
 }
+
+export function getByEmail(email: string) {
+  return db.select('*').from('classkick.user').where({ email }).then(result => {
+    let head = result[0]
+    return UserRow.fromSql(head)
+  })
+}
+
+export function getAll() {
+  return db.select('*').from('classkick.user').then(result => {
+    return result.map(userRow => UserRow.fromSql(userRow))
+  })
+}

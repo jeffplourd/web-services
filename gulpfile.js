@@ -113,3 +113,8 @@ gulp.task('dbUpdate', (cb) => {
     runSequence('build', () => dbMigrate(() => cb()));
   }
 });
+
+gulp.task('makePretty', (cb) => {
+  $exec('prettier --list-different --no-semi --parser typescript --single-quote --write --print-width 80 "src/**/*.ts"')
+    .then(() => cb());
+});
