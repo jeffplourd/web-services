@@ -36,7 +36,8 @@ export default function(server: Hapi.Server, config) {
     method: 'POST',
     path: '/users/login',
     handler: (request, reply) => {
-      userService.login(request.payload)
+      userService
+        .login(request.payload)
         .then(token => {
           reply({ token })
         })

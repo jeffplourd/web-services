@@ -13,10 +13,7 @@ export class UserRoleRow extends BaseRow {
   }
 
   static apply(obj): UserRoleRow {
-    return new UserRoleRow(
-      obj.userId,
-      obj.role
-    )
+    return new UserRoleRow(obj.userId, obj.role)
   }
 }
 
@@ -30,6 +27,8 @@ export function getByUserId(id) {
     .from('classkick.user_role')
     .where({ user_id: id })
     .then(result => {
-      return result.map((roleRow) => UserRoleRow.apply(UserRoleRow.fromSql(roleRow)))
+      return result.map(roleRow =>
+        UserRoleRow.apply(UserRoleRow.fromSql(roleRow))
+      )
     })
 }

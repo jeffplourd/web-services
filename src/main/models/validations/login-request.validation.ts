@@ -1,19 +1,21 @@
 import * as Joi from 'joi'
 import AuthRequest from './auth-request.validation'
 
-const generateEmail = (context) => {
+const generateEmail = context => {
   try {
     return Joi.attempt(context.id, Joi.string().email())
+  } catch (error) {
+    /* fail silently */
   }
-  catch (error) {/* fail silently */}
 }
 generateEmail['description'] = 'generated email'
 
-const generateUsername = (context) => {
+const generateUsername = context => {
   try {
     return Joi.attempt(context.id, Joi.string().regex(/^@*/))
+  } catch (error) {
+    /* fail silently */
   }
-  catch (error) {/* fail silently */}
 }
 generateUsername['description'] = 'generated username'
 

@@ -32,12 +32,8 @@ export function insertUser(user: UserRow) {
 }
 
 export function getById(id: string) {
-  return db
-    .select('*')
-    .from('classkick.user')
-    .where({ id })
-    .then(result => {
-      let head = result[0]
-      return UserRow.fromSql(head)
-    })
+  return db.select('*').from('classkick.user').where({ id }).then(result => {
+    let head = result[0]
+    return UserRow.fromSql(head)
+  })
 }

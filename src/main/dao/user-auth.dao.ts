@@ -49,8 +49,10 @@ export function insertUserAuth(auth: UserAuthRow) {
 
 export function getByUserEmailAndType(userEmail: string, authType: string) {
   return db
-    .raw(`SELECT a.* FROM classkick.user_auth a JOIN classkick.user u ON a.user_id = u.id WHERE u.email = '${userEmail}' AND a.type = '${authType}'`)
-    .then((result) => {
+    .raw(
+      `SELECT a.* FROM classkick.user_auth a JOIN classkick.user u ON a.user_id = u.id WHERE u.email = '${userEmail}' AND a.type = '${authType}'`
+    )
+    .then(result => {
       let head = result.rows && result.rows[0]
       return UserAuthRow.apply(UserAuthRow.fromSql(head))
     })

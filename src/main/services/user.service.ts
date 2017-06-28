@@ -24,13 +24,14 @@ export async function create(newUser: NewUser) {
 }
 
 export async function login(loginRequest) {
-
   let authRow
 
   if (loginRequest.email) {
-    authRow = await userAuthDao.getByUserEmailAndType(loginRequest.email, loginRequest.auth.type)
-  }
-  else if (loginRequest.username) {
+    authRow = await userAuthDao.getByUserEmailAndType(
+      loginRequest.email,
+      loginRequest.auth.type
+    )
+  } else if (loginRequest.username) {
     authRow = loginRequest.username
   }
 
@@ -42,14 +43,20 @@ export async function login(loginRequest) {
 
   let userRow = await userDao.getById(authRow.userId)
   let userRoleRows = await userRoleDao.getByUserId(authRow.userId)
-  let userRowData = new UserRowData(userRow, userRoleRows, [ authRow ])
+  let userRowData = new UserRowData(userRow, userRoleRows, [authRow])
 
   return authenticationService.createAccessToken(userRowData)
 }
 
-async function validateAuthRow(authRow: UserAuthRow, authRequest: AuthRequest): Promise<boolean> {
+async function validateAuthRow(
+  authRow: UserAuthRow,
+  authRequest: AuthRequest
+): Promise<boolean> {
   if (authRequest.type === 'password') {
-    return await authenticationService.checkPassword(authRequest.password, authRow.passwordHash)
+    return await authenticationService.checkPassword(
+      authRequest.password,
+      authRow.passwordHash
+    )
   }
   return true
 }
@@ -59,7 +66,7 @@ async function newUserAccountRows(newUser): Promise<UserRowData> {
   let roleRows = newUser.roles
     ? newUser.roles.map(role => new UserRoleRow(userRow.id, role))
     : []
-  let authRows = [(await newAuthRow(userRow, newUser.auth))]
+  let authRows = [await newAuthRow(userRow, newUser.auth)]
 
   return new UserRowData(userRow, roleRows, authRows)
 }
