@@ -2,6 +2,7 @@ CREATE SCHEMA IF NOT EXISTS classkick;
 
 CREATE TABLE IF NOT EXISTS classkick.user (
     id              VARCHAR(36)   NOT NULL,
+    username        VARCHAR(80),
     email           VARCHAR(190),
     first_name      VARCHAR(35),
     last_name       VARCHAR(35),
@@ -10,7 +11,8 @@ CREATE TABLE IF NOT EXISTS classkick.user (
     last_login      TIMESTAMP     NOT NULL,
 
     CONSTRAINT user_pk PRIMARY KEY (id),
-    CONSTRAINT user_ux_email UNIQUE (email)
+    CONSTRAINT user_ux_email UNIQUE (email),
+    CONSTRAINT user_ux_username UNIQUE (username)
 );
 
 CREATE TABLE IF NOT EXISTS classkick.user_auth (

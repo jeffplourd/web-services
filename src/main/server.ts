@@ -16,10 +16,19 @@ export function init(config): Promise<Hapi.Server> {
       }
     })
 
-    Graphql(server, config)
-    User(server, config)
+    server.register(require('hapi-auth-jwt'), (err) => {
 
-    resolve(server)
+      // We are giving the strategy a name of 'jwt'
+      server.auth.strategy('jwt', 'jwt', 'required', {
+        key: config.server.secret,
+        verifyOptions: { algorithms: ['HS256'] }
+      })
 
+      Graphql(server, config)
+      User(server, config)
+
+      resolve(server)
+
+    })
   })
 }

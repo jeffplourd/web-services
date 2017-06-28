@@ -20,7 +20,7 @@ eachSeries(files, (fileName, cb) => {
       cb(error)
     })
 
-}, () => {
-  console.log('db.destroy()')
+}, (error) => {
+  console.log('db.destroy()', error)
   db.destroy()
 })

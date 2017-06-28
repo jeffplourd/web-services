@@ -1,1 +1,1 @@
-declare function bundle();
+declare function bundle()
