@@ -1,15 +1,9 @@
-
 let _ = require('lodash');
 let { exec } = require('child_process');
 let moment = require('moment');
 let fs = require('fs');
 let path = require('path');
-let argv = require('yargs').argv;
-
-const env = {
-  NODE_ENV: argv.env || 'development',
-  NODE_CONFIG_DIR: './build/main/config'
-};
+let env = require('./env');
 
 /**
  * @param cmd {string}
@@ -148,5 +142,4 @@ module.exports = {
   extractMapping,
   dbMigrate,
   addMigrationFile,
-  env
 };
