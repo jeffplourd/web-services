@@ -33,8 +33,12 @@ export async function login(loginRequest) {
       loginRequest.auth.type
     )
   } else if (loginRequest.username) {
-    authRow = loginRequest.username
+    authRow = await userAuthDao.getByUsernameAndType(
+      loginRequest.username,
+      loginRequest.auth.type
+    )
   }
+
 
   let isValid = await validateAuthRow(authRow, loginRequest.auth)
 
@@ -53,13 +57,13 @@ async function validateAuthRow(
   authRow: UserAuthRow,
   authRequest: AuthRequest
 ): Promise<boolean> {
-  if (authRequest.type === 'password') {
+  if (authRow && authRequest.type === 'password') {
     return await authenticationService.checkPassword(
       authRequest.password,
       authRow.passwordHash
     )
   }
-  return true
+  return false
 }
 
 async function newUserAccountRows(newUser): Promise<UserRowData> {

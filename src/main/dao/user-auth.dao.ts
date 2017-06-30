@@ -52,8 +52,19 @@ export function getByUserEmailAndType(userEmail: string, authType: string) {
     .raw(
       `SELECT a.* FROM classkick.user_auth a JOIN classkick.user u ON a.user_id = u.id WHERE u.email = '${userEmail}' AND a.type = '${authType}'`
     )
-    .then(result => {
-      let head = result.rows && result.rows[0]
-      return UserAuthRow.apply(UserAuthRow.fromSql(head))
-    })
+    .then((result) => getHead(result))
+}
+
+export function getByUsernameAndType(username: string, authType: string) {
+  return db
+    .raw(
+      `SELECT a.* FROM classkick.user_auth a JOIN classkick.user u ON a.user_id = u.id WHERE u.username = ${username} AND a.type = ${authType}`
+    )
+    .then((result) => getHead(result))
+}
+
+
+function getHead(result): UserAuthRow|undefined {
+  let head = result.rows && result.rows[0]
+  return head ? UserAuthRow.apply(UserAuthRow.fromSql(head)) : undefined
 }
