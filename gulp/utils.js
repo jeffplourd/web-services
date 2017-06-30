@@ -141,5 +141,5 @@ module.exports = {
   gclusterExists,
   extractMapping,
   dbMigrate,
-  addMigrationFile,
+  addMigrationFile
 };

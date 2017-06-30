@@ -1,3 +1,5 @@
 .idea
 node_modules
 build
+templates/kubernetes-service.yml
+templates/kubernetes-deployment.yml

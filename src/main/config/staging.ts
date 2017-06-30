@@ -1,13 +1,15 @@
-{
+const config = {
   "server": {
     "port": 3000,
-    "secret": "mysecret"
+    "secret": "mystagingsecret"
   },
   "postgres": {
-    "host": "192.168.99.100",
+    "host": "127.0.0.1",
     "port": "5432",
     "user": "postgres",
     "database": "postgres",
     "password": "postgres"
   }
 }
+
+export = config
