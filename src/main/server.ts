@@ -14,6 +14,10 @@ export function init(config): Promise<Hapi.Server> {
       }
     }
 
+    if (process.env.NODE_ENV === 'development') {
+      connection['host'] = 'localhost'
+    }
+
     server.connection(connection)
 
     server.register(require('hapi-auth-jwt'), err => {
