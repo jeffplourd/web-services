@@ -4,6 +4,19 @@ import NewUser from '../models/validations/new-user.validation'
 import LoginRequest from '../models/validations/login-request.validation'
 
 export default function(server: Hapi.Server, config) {
+
+  server.route({
+    method: 'GET',
+    path: '/info',
+    handler: (request, reply) => {
+      console.log('request', config)
+      return reply(config)
+    },
+    config: {
+      auth: false
+    }
+  })
+
   server.route({
     method: 'GET',
     path: '/users',

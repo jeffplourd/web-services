@@ -7,13 +7,14 @@ export function init(config): Promise<Hapi.Server> {
     const port = process.env.port || config.server.port
     const server = new Hapi.Server()
 
-    server.connection({
-      host: 'localhost',
+    const connection = {
       port,
       routes: {
         cors: true
       }
-    })
+    }
+
+    server.connection(connection)
 
     server.register(require('hapi-auth-jwt'), err => {
       // We are giving the strategy a name of 'jwt'

@@ -9,7 +9,7 @@ const config = {
 const isProduction = process.env.CIRCLE_BRANCH === 'production';
 
 const gcloud = {
-  branch: process.env.CIRCLE_BRANCH,
+  branch: process.env.CIRCLE_BRANCH || 'development',
   dbInstanceName: isProduction ? process.env.DB_INSTANCE_NAME_PRODUCTION : process.env.DB_INSTANCE_NAME_STAGING,
   domain: 'us.gcr.io',
   projectId: process.env.PROJECT_ID,

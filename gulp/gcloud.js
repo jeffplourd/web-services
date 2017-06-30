@@ -28,7 +28,7 @@ gulp.task('gcloudConfig', (cb) => {
 });
 
 gulp.task('dockerBuild', (cb) => {
-  $exec(`docker build -t ${env.image} --build-arg ENVIRONMENT=${env.branch} -f templates/Dockerfile .`)
+  $exec(`docker build -t ${env.image} --build-arg -f templates/Dockerfile.${env.branch} .`)
     .then(() => cb());
 });
 
